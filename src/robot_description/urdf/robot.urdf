@@ -1,6 +1,50 @@
 <?xml version="1.0" ?>
 
 <robot name="robot">
+
+    <!--Cambiamos a materiales perzonalizados -->
+    <!--Tambien vamos agg la friccion-->
+    <gazebo reference="link_chassis">
+        <material>Gazebo/DarkMagentaTransparent</material>
+    </gazebo>
+    <gazebo reference="link_caster_wheel">
+        <material>Gazebo/LightBlueLaser</material>
+        <mu1>0</mu1>
+        <mu2>0</mu2>
+    </gazebo>
+    <gazebo reference="link_left_wheel">
+        <material>Gazebo/OrangeTransparent</material>
+        <mu1>1</mu1>
+        <mu2>1</mu2>
+    </gazebo>
+    <gazebo reference="link_right_wheel">
+        <material>Gazebo/WoodFloor</material>
+        <mu1>1</mu1>
+        <mu2>1</mu2>
+    </gazebo>
+
+    <!-- Plugin para separar fixex joints. Caster wheel separado.(esto se hace pq gazebo une los fixes) -->
+    <gazebo reference="joint_chassis_caster_wheel">
+        <preserveFixedJoint>true</preserveFixedJoint>
+    </gazebo>
+
+
+    <!--Plugin para conectar gazebo con ROS -->
+    <gazebo>
+    <plugin filename="libgazebo_ros_diff_drive.so" name="differential_drive_controller">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>20</updateRate>
+        <leftJoint>joint_chassis_left_wheel</leftJoint>
+        <rightJoint>joint_chassis_right_wheel</rightJoint>
+        <wheelSeparation>1.66</wheelSeparation>
+        <wheelDiameter>0.8</wheelDiameter>
+        <torque>10</torque>
+        <commandTopic>cmd_vel</commandTopic>
+        <odometryTopic>odom</odometryTopic>
+        <odometryFrame>odom</odometryFrame>
+        <robotBaseFrame>link_chassis</robotBaseFrame>
+    </plugin>
+    </gazebo>
     <!-- Link - chassis -->
     <link name="link_chassis">
         <inertial>
